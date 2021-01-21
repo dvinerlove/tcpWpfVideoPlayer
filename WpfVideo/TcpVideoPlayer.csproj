@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>WpfVideo.ico</ApplicationIcon>
+    <Version>1.4.8.8</Version>
+    <Authors>Андрей Бухалов</Authors>
+    <Company>Андрей Бухалов Company</Company>
+    <Configurations>Debug;Release;narutoplayer</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Vlc.DotNet-master\**" />
+    <EmbeddedResource Remove="Vlc.DotNet-master\**" />
+    <None Remove="Vlc.DotNet-master\**" />
+    <Page Remove="Vlc.DotNet-master\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="emojisqwad_119212226_451016725803217_3527878487396807783_n.jpg" />
+    <None Remove="emojisqwad_127090559_994288217721417_1396185176314147888_n.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetCoreServer" Version="5.0.7" />
+    <PackageReference Include="Vlc.DotNet.Forms" Version="3.1.0" />
+    <PackageReference Include="Vlc.DotNet.Wpf" Version="3.1.0" />
+    <PackageReference Include="YoutubeExplode" Version="5.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="emojisqwad_119212226_451016725803217_3527878487396807783_n.jpg" />
+    <Resource Include="emojisqwad_127090559_994288217721417_1396185176314147888_n.jpg" />
+  </ItemGroup>
+
+</Project>

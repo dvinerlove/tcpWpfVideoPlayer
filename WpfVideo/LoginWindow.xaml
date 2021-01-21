@@ -1,0 +1,36 @@
+﻿<Window x:Class="WpfVideo.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfVideo.Views"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="252" Width="306" Loaded="Window_Loaded" ResizeMode="NoResize">
+    <Grid>
+        <Grid x:Name="mainGrid"  Background="#FF0F0F0F"  Visibility="Visible">
+            <StackPanel  Margin="20">
+                <TextBlock Foreground="White" Text="penisPlayer"  TextAlignment="Center" >
+                    <LineBreak></LineBreak>
+                </TextBlock>
+                <!--<TextBlock Foreground="White" Text="AUO AYE"  TextAlignment="Center">
+                    <LineBreak></LineBreak>
+                </TextBlock>-->
+                <Border Height="16"></Border>
+                <Button x:Name="hostBtn" Width="84" Height="30" BorderBrush="White" Background="Black" Foreground="White" Content="host server" Click="hostBtn_Click"></Button>
+                <Border Height="16"></Border>
+                <Button x:Name="connectBtn" Width="64" Height="30" BorderBrush="White" Background="Black" Foreground="White" Content="connect" Click="connectBtn_Click"></Button>
+            </StackPanel>
+        </Grid>
+        <Grid  x:Name="loginGrid" Visibility="Collapsed">
+            <TextBox x:Name="hostString" Margin="56,65,119,0" Text="25.109.150.192" TextWrapping="Wrap" TextAlignment="Center" FontSize="14" BorderThickness="0,0,0,0" Height="24" VerticalAlignment="Top"/>
+            <TextBox  x:Name="portString" Margin="192,65,62,0" Text="6565" TextWrapping="Wrap" TextAlignment="Center" FontSize="14" BorderThickness="0,0,0,0" Height="24" VerticalAlignment="Top"/>
+
+            <TextBox x:Name="usernameString" Text="погоняло"   FontStretch="Medium" FontStyle="Normal" TextAlignment="Center" FontSize="14" BorderThickness="0,0,0,0" Margin="83,94,83,0" Height="30" VerticalAlignment="Top"/>
+            <Button x:Name="acceptBtn" Content="Connect" HorizontalAlignment="Center" Margin="0,129,0,0" RenderTransformOrigin="0.798,1.232" Width="84" Click="Button_Click" BorderThickness="1,1,1,1" Background="Black" Foreground="White"  FontSize="12" BorderBrush="White" Height="29" VerticalAlignment="Top" />
+            <Button x:Name="backBtn" Content="Back" HorizontalAlignment="Center" Margin="0,163,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.798,1.232" Height="32" Width="84" BorderThickness="1,1,1,1" Background="Black" Foreground="White" BorderBrush="White" FontSize="12" Click="backBtn_Click"/>
+
+        </Grid>
+
+
+    </Grid>
+</Window>

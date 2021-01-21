@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpVideoPlayer", "WpfVideo\TcpVideoPlayer.csproj", "{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		narutoplayer|Any CPU = narutoplayer|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.narutoplayer|Any CPU.ActiveCfg = narutoplayer|Any CPU
+		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.narutoplayer|Any CPU.Build.0 = narutoplayer|Any CPU
+		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8FB76631-EB45-48B5-947B-C13844A26FDD}
+	EndGlobalSection
+EndGlobal
