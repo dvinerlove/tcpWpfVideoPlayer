@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfVideo.Views"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="252" Width="306" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="Подключение" Height="252" Width="306" Loaded="Window_Loaded" ResizeMode="NoResize">
     <Grid>
         <Grid x:Name="mainGrid"  Background="#FF0F0F0F"  Visibility="Visible">
             <StackPanel  Margin="20">
-                <TextBlock Foreground="White" Text="penisPlayer"  TextAlignment="Center" >
+                <TextBlock Foreground="White" Text="подключение"  TextAlignment="Center" >
                     <LineBreak></LineBreak>
                 </TextBlock>
                 <!--<TextBlock Foreground="White" Text="AUO AYE"  TextAlignment="Center">

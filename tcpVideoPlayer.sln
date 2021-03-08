@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpVideoPlayer", "WpfVideo\TcpVideoPlayer.csproj", "{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrlExtractor", "Url Extractor\UrlExtractor.csproj", "{51F17C39-2443-47F4-A783-DD4C36B4F4CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vimeo1.UrlExtractor", "Vimeo.UrlExtractor\Vimeo1.UrlExtractor.csproj", "{03D84971-70C0-41D5-AF31-A333DE4D8A6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +22,18 @@ Global
 		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.narutoplayer|Any CPU.Build.0 = narutoplayer|Any CPU
 		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F4EEEB8-9D78-4AEB-B704-13E8C74D1799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F17C39-2443-47F4-A783-DD4C36B4F4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F17C39-2443-47F4-A783-DD4C36B4F4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F17C39-2443-47F4-A783-DD4C36B4F4CB}.narutoplayer|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F17C39-2443-47F4-A783-DD4C36B4F4CB}.narutoplayer|Any CPU.Build.0 = Debug|Any CPU
+		{51F17C39-2443-47F4-A783-DD4C36B4F4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F17C39-2443-47F4-A783-DD4C36B4F4CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03D84971-70C0-41D5-AF31-A333DE4D8A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D84971-70C0-41D5-AF31-A333DE4D8A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D84971-70C0-41D5-AF31-A333DE4D8A6A}.narutoplayer|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D84971-70C0-41D5-AF31-A333DE4D8A6A}.narutoplayer|Any CPU.Build.0 = Debug|Any CPU
+		{03D84971-70C0-41D5-AF31-A333DE4D8A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D84971-70C0-41D5-AF31-A333DE4D8A6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

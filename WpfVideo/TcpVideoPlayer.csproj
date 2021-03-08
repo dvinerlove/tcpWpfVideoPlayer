@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="NetCoreServer" Version="5.0.7" />
+    <PackageReference Include="VideoLibrary" Version="3.0.9" />
     <PackageReference Include="Vlc.DotNet.Forms" Version="3.1.0" />
     <PackageReference Include="Vlc.DotNet.Wpf" Version="3.1.0" />
     <PackageReference Include="YoutubeExplode" Version="5.1.9" />
@@ -32,6 +33,11 @@
 
   <ItemGroup>
     <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Url Extractor\UrlExtractor.csproj" />
+    <ProjectReference Include="..\Vimeo.UrlExtractor\Vimeo1.UrlExtractor.csproj" />
   </ItemGroup>
 
   <ItemGroup>
