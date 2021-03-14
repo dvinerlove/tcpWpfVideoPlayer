@@ -11,6 +11,8 @@
         Height="520" Width="855"
         Loaded="Window_Loaded" KeyDown="controlPanel_KeyDown" Icon="/emojisqwad_119212226_451016725803217_3527878487396807783_n.jpg" Closed="Window_Closed">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
         <Style x:Key="DecreaseButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -115,12 +117,15 @@
     </Window.Resources>
     <Grid Background="Black">
 
-        <Grid x:Name="logPanel" Background="#FF0F0F0F" Panel.ZIndex="999999" Visibility="Collapsed" HorizontalAlignment="Right" Width="369" Height="394" VerticalAlignment="Top">
+        <Grid x:Name="logPanel" Background="#FF0F0F0F" Panel.ZIndex="999999" Visibility="Hidden" HorizontalAlignment="Right" Width="369" Height="394" VerticalAlignment="Top">
             <Border BorderBrush="White" BorderThickness="2"></Border>
-            <Button BorderThickness="1,1,1,1" Content="Link" Click="Button_Click_2" Margin="284,106,0,0"  HorizontalAlignment="Left" Width="33" Height="27" VerticalAlignment="Top" BorderBrush="White" Background="Black" Foreground="White"></Button>
-            <Button BorderThickness="1,1,1,1" Content="File" Margin="328,106,0,0"  HorizontalAlignment="Left" Width="31" Height="27" VerticalAlignment="Top" BorderBrush="White" Background="Black" Foreground="White"></Button>
-            <Button BorderThickness="1,1,1,1" Content="Folder" Margin="284,143,0,0" Click="Button_Click_1" HorizontalAlignment="Left" Width="75" Height="27" VerticalAlignment="Top" BorderBrush="White" Background="Black" Foreground="White"/>
-            <ListBox x:Name="userList" HorizontalAlignment="Center" Width="369" Height="95" VerticalAlignment="Top" BorderBrush="White" FontSize="14" FontStretch="ExtraCondensed" FontStyle="Normal" FontWeight="Regular" SelectedIndex="0" AutomationProperties.IsOffscreenBehavior="Onscreen" Background="Transparent" Foreground="White"/>
+            <Button BorderThickness="1,1,1,1" Content="Ссылка" Click="Button_Click_2" Margin="284,106,0,0"  HorizontalAlignment="Left" Width="75" Height="27" VerticalAlignment="Top" BorderBrush="White" Background="Black" Foreground="White"></Button>
+            <Button Visibility="Collapsed" BorderThickness="1,1,1,1" Content="File" Margin="328,106,0,0"  HorizontalAlignment="Left" Width="31" Height="27" VerticalAlignment="Top" BorderBrush="White" Background="Black" Foreground="White"></Button>
+            <Button BorderThickness="1,1,1,1" Content="Папка" Margin="284,143,0,0" Click="Button_Click_1" HorizontalAlignment="Left" Width="75" Height="27" VerticalAlignment="Top" BorderBrush="White" Background="Black" Foreground="White"/>
+            <ListView x:Name="userList" HorizontalAlignment="Center" Width="369" Height="95" VerticalAlignment="Top" BorderBrush="White" FontSize="14" FontStretch="ExtraCondensed" FontStyle="Normal" FontWeight="Regular" SelectedIndex="0" AutomationProperties.IsOffscreenBehavior="Onscreen" Background="Transparent" Foreground="White">
+ 
+               
+            </ListView>
             <TextBox x:Name="fileNameTextBox" Visibility="Collapsed" HorizontalAlignment="Left" Margin="284,330,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" Height="50" TextChanged="fileNameTextBox_TextChanged"/>
             <ListBox x:Name="filesListbox"  HorizontalContentAlignment="Center"  Margin="0,182,0,0" SelectionChanged="filesListbox_SelectionChanged" MouseDoubleClick="filesListbox_MouseDoubleClick" BorderBrush="White" BorderThickness="0,1,0,0" FontStretch="Medium" Foreground="White" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <!--<ListBoxItem>
@@ -187,29 +192,35 @@
             
         </Vlc:VlcControl>-->
         <ContentControl  x:Name="controlPanel" Loaded="controlPanel_Loaded" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" KeyDown="controlPanel_KeyDown" MouseDown="controlPanel_MouseDown" MouseDoubleClick="controlPanel_MouseDoubleClick" MouseMove="controlPanel_MouseMove" >
-             
+
         </ContentControl>
         <Grid x:Name="buttonsPanel" >
             <!--<Grid Background="#26000000" Height="83" VerticalAlignment="Bottom"/>-->
             <Button Content="&lt;" Name="back"  BorderThickness="0,0,0,0" Margin="29,0,0,46" Click="back_Click" HorizontalAlignment="Left" Width="18" Height="25" VerticalAlignment="Bottom" Visibility="Collapsed"/>
-            <Button Focusable="False" Style="{StaticResource ButtonStyle}" Content="Play" Name="playPause"  BorderThickness="0,0,0,0" Margin="35,0,0,40" Click="playPause_Click" HorizontalAlignment="Left" Width="72" Height="28" VerticalAlignment="Bottom" Padding="0,-2,0,0"   Foreground="White" Opacity="0.95"/>
+            <Button Focusable="False" Style="{StaticResource ButtonStyle}"  Name="playPause"  BorderThickness="0,0,0,0" Margin="35,0,0,40" Click="playPause_Click" HorizontalAlignment="Left" Width="72" Height="28" VerticalAlignment="Bottom" Padding="0,-2,0,0"   Foreground="White" Opacity="0.95" Cursor="Hand">
+                <!--<Image Source="/icons8-play-52(1).png" Stretch="Uniform">
+
+                </Image>-->
+                <!--<Image Source="/icons8-pause-52.png"></Image>-->
+                <Image x:Name="playBtnImage" Source="/icons8-play-52(1).png" Width="19"></Image>
+            </Button>
             <Button Focusable="False" Style="{StaticResource ButtonStyle}" Visibility="Hidden" Content="Восстановить сессию" Name="resetBtn"  BorderThickness="0,0,0,0" Margin="35,0,0,75"   HorizontalAlignment="Left" Width="212" Height="28" VerticalAlignment="Bottom" Padding="0,-2,0,0"   Foreground="White" Opacity="0.95" Click="resetBtn_Click"/>
-            <Button Style="{StaticResource ButtonStyle}" Content="connect" Name="connectBtn"  BorderThickness="0,0,0,0" Margin="35,0,0,10" Click="connectBtn_Click" HorizontalAlignment="Left" Width="72" Height="25" VerticalAlignment="Bottom" Padding="0,-2,0,0"  Foreground="White" Opacity="0.95"/>
+            <Button Style="{StaticResource ButtonStyle}" Content="Сервер" Name="connectBtn"  BorderThickness="0,0,0,0" Margin="35,0,0,10" Click="connectBtn_Click" HorizontalAlignment="Left" Width="72" Height="25" VerticalAlignment="Bottom" Padding="0,-2,0,0"  Foreground="White" Opacity="0.95"/>
             <Button Content=">" Name="forward"  BorderThickness="0,0,0,0" Margin="90,0,0,46" HorizontalAlignment="Left" Width="17" Height="25" VerticalAlignment="Bottom" Click="forward_Click" Visibility="Collapsed"/>
             <StackPanel x:Name="speedPanel" Visibility="Visible" Margin="0,0,21,75" HorizontalAlignment="Right" Width="75" Height="146" VerticalAlignment="Bottom" >
-                <Button Content="1"  Width="68" Height="24"   Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click" />
-                <Button Content="1.25"  Width="68" Height="24"   Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click" />
-                <Button Content="1.50"  Width="68" Height="24" Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click"/>
-                <Button Content="1.75"  Width="68" Height="24" Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click"/>
-                <Button Content="2"  Width="68" Height="24"  Background="#7FD4D4D4" BorderThickness="0,0,0,0"  Margin="2" Click="Speed_Click"/>
+                <Button Content="1"  Width="68" Height="24"     Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click" />
+                <Button Content="1.25"  Width="68" Height="24"  Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click" />
+                <Button Content="1.50"  Width="68" Height="24"  Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click"/>
+                <Button Content="1.75"  Width="68" Height="24"  Background="#7FD4D4D4" BorderThickness="0,0,0,0" Margin="2" Click="Speed_Click"/>
+                <Button Content="2"  Width="68" Height="24"     Background="#7FD4D4D4" BorderThickness="0,0,0,0"  Margin="2" Click="Speed_Click"/>
             </StackPanel>
-            <Button Style="{StaticResource ButtonStyle}" Content="settings" Name="settings" Margin="0,0,21,40" HorizontalAlignment="Right" Width="75" Height="28" VerticalAlignment="Bottom" Click="settings_Click" Padding="0,-2,0,0" BorderThickness="0,0,0,0"  Foreground="White" Opacity="0.95"/>
+            <Button Style="{StaticResource ButtonStyle}" Content="Скорость" Name="settings" Margin="0,0,21,40" HorizontalAlignment="Right" Width="75" Height="28" VerticalAlignment="Bottom" Click="settings_Click" Padding="0,-2,0,0" BorderThickness="0,0,0,0"  Foreground="White" Opacity="0.95"/>
             <Slider Visibility="Collapsed"  IsMoveToPointEnabled="True" IsEnabled="False" x:Name="postionSlider" Margin="0,438,0,0"  Height="16" VerticalAlignment="Top" HorizontalAlignment="Center" Width="780" />
             <Slider Style="{StaticResource SliderStyle}"  IsMoveToPointEnabled="True" x:Name="postionSlider2" Margin="248,0,129,40" MouseUp="postioonSlider_MouseUp" MouseDown="postioonSlider_MouseDown" MouseLeftButtonDown="postioonSlider2_MouseLeftButtonDown" PreviewMouseLeftButtonDown="postioonSlider2_PreviewMouseLeftButtonDown" DragEnter="postioonSlider2_DragEnter" Height="23" VerticalAlignment="Bottom"/>
             <Slider Style="{StaticResource SliderStyle}"  IsMoveToPointEnabled="True" x:Name="volumeSlider2" Margin="142,0,0,40" Height="23" VerticalAlignment="Bottom" ValueChanged="volumeSlider2_ValueChanged" HorizontalAlignment="Left" Width="73" Orientation="Horizontal"/>
             <TextBlock Foreground="White" Name="tb1" HorizontalAlignment="Right" Margin="0,0,130,19" Text="10:10" TextWrapping="Wrap" Height="16" VerticalAlignment="Bottom"/>
             <TextBlock Foreground="White" Name="tb2" HorizontalAlignment="Left" Margin="248,0,0,19" Text="00:00" TextWrapping="Wrap" Height="16" VerticalAlignment="Bottom"/>
-            <Button Style="{StaticResource ButtonStyle}" x:Name="logShowHide" Content="log"  Margin="0,0,21,10" Click="logShowHide_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Padding="0,-2,0,0" BorderThickness="0,0,0,0" BorderBrush="Black"  Foreground="White" Opacity="0.95"></Button>
+            <Button Style="{StaticResource ButtonStyle}" x:Name="logShowHide" Content="Меню"  Margin="0,0,21,10" Click="logShowHide_Click" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Padding="0,-2,0,0" BorderThickness="0,0,0,0" BorderBrush="Black"  Foreground="White" Opacity="0.95"></Button>
             <TextBlock Foreground="White" x:Name="volumeTextBlock" HorizontalAlignment="Left" Margin="170,0,0,19" Text="0%" TextWrapping="Wrap" Height="16" VerticalAlignment="Bottom"/>
         </Grid>
     </Grid>

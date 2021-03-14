@@ -34,7 +34,7 @@ namespace WpfVideo.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-            if (acceptBtn.Content.ToString() == "host")
+            if (acceptBtn.Content.ToString() == "Создать")
             {
 
             }
@@ -45,20 +45,9 @@ namespace WpfVideo.Views
 
             try
             {
-               // command = new Commands();
-                //client.Connect(hostString.Text, Convert.ToInt32(portString.Text));
-                //clientUsername = usernameString.Text;
-                //client.WriteLineAndGetReply(command.Login(clientUsername), TimeSpan.Zero);
-                //client.WriteLineAndGetReply("\n", TimeSpan.Zero);
-                //
+ 
                 this.Close();
-            //    loginGrid.Visibility = Visibility.Collapsed;
-            //    panelGrid.Visibility = Visibility.Visible;
-                
-            //    DispatcherTimer timer = new DispatcherTimer();
-            //    timer.Interval = TimeSpan.FromSeconds(0.5);
-            //    timer.Tick += timer_Tick;
-            //    timer.Start();
+ 
             }
             catch (Exception ex)
             {
@@ -70,13 +59,7 @@ namespace WpfVideo.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //client = new SimpleTcpClient();
-            //client.StringEncoder = Encoding.UTF8;
-            //client.DataReceived += Client_DataReceived;
-
-            
-
-
+ 
         }
         void timer_Tick(object sender, EventArgs e)
         {
@@ -85,92 +68,14 @@ namespace WpfVideo.Views
 
             if (player != null)
             {
-                //client.WriteLineAndGetReply("IMH|" + clientUsername + " " + player.IsPlaying.ToString() + "  \n", TimeSpan.FromSeconds(5));
-
-                //client.WriteLineAndGetReply("PPB|"+ player.IsPlaying.ToString(),TimeSpan.FromSeconds(0.1));
-                //if (player.Isst)
-                //{
-
-                //}
-
-                //if (player.IsPositionChanged)
-                //{
-                //    client.WriteLineAndGetReply("VPC|" + player.VideoPosition, TimeSpan.FromSeconds(0.2));
-                //}
+ 
             }
 
 
 
 
         }
-        //private void Client_DataReceived(object sender, SimpleTCP.Message e)
-        //{
-        //    string usrn = e.MessageString.Split(' ')[0].Substring(0, e.MessageString.Split(' ')[0].Length - 1);
-        //    stringChat.Dispatcher.Invoke((MethodInvoker)delegate ()
-        //    {
-        //        if (e.MessageString.Split('|')[0] == "MSG")
-        //        {
-        //            string message = e.MessageString.Replace("MSG|", "");
-        //            //stringChat.AppendText(Environment.NewLine);
-                    
-
-        //                //   stringChat.Text += message.Split(' ')[0].Replace(":", "") // message.Substring(0, message.Length - 1).Replace(clientUsername, "_me");
-        //                message = message.Replace(clientUsername + ':', "me");
-        //                if (message.Contains("подлупился."))
-        //                {
-        //                    userList.Items.Add(clientUsername.Trim());
-        //                    if (commandLine.Text =="/set")
-        //                    {
-        //                        client.WriteLineAndGetReply(commandLine.Text + " " + clientUsername + " " + fileNameTextBox.Text, TimeSpan.Zero);
-        //                    }
-        //                }
-        //                stringChat.Text += message;
-                  
-        //        }
-        //        if (e.MessageString.Split('|')[0] == "SET")
-        //        {
-        //            selectedVideo.Text = "";
-        //            string message = e.MessageString.Replace("SET|", "");
-        //            selectedVideo.Text = message;
-
-        //        }
-        //        if (e.MessageString.Split('|')[0] == "VPC")
-        //        {
-        //            selectedVideo.Text = "";
-        //            string message = e.MessageString.Replace("VPC|", "");
-        //            long p = long.Parse(message);
-        //            player.VideoPositionChange(p);
-
-        //        }
-
-        //        //else
-        //        //{
-        //        //    client.WriteLineAndGetReply(command.ReadCommand(e.MessageString, clientUsername), TimeSpan.Zero);
-        //        //}
-
-        //        if (!userList.Items.Contains(command.GetUsers(e.MessageString)) && command.GetUsers(e.MessageString) != "")
-        //        {
-        //            userList.Items.Add(command.GetUsers(e.MessageString).Trim());
-
-        //            string[] arr = new string[userList.Items.Count];
-        //            userList.Items.CopyTo(arr, 0);
-
-        //            var arr2 = arr.Distinct();
-
-        //            userList.Items.Clear();
-        //            foreach (string s in arr2)
-        //            {
-        //                userList.Items.Add(s);
-        //            }
-
-        //        }
-
-        //        //stringChat.Focus();
-        //        // Move the caret to the end of the text box
-        //        stringChat.Select(stringChat.Text.Length, 0);
-        //    });
-        //}
-        string videoPath;
+         
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             //OpenFileDialog openFile = new OpenFileDialog();
@@ -180,17 +85,13 @@ namespace WpfVideo.Views
         }
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            //player = new PlayerWindow(videoPath);
-            //player.Show();
-            //this.Hide();
-            //player.playPause.Content="sex";
+
         }
 
         private void commandLine_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                //client.WriteLineAndGetReply(commandLine.Text + " "+clientUsername+" " + fileNameTextBox.Text, TimeSpan.Zero);
             }
         }
 
@@ -201,7 +102,7 @@ namespace WpfVideo.Views
             hostBtn.Visibility = Visibility.Collapsed;
             backBtn.Visibility = Visibility.Visible;
             acceptBtn.Visibility = Visibility.Visible;
-            acceptBtn.Content = "host";
+            acceptBtn.Content = "Создать";
         }
 
         private void connectBtn_Click(object sender, RoutedEventArgs e)
@@ -211,7 +112,7 @@ namespace WpfVideo.Views
             hostBtn.Visibility = Visibility.Collapsed;
             backBtn.Visibility = Visibility.Visible;
             acceptBtn.Visibility = Visibility.Visible;
-           acceptBtn.Content = "connect";
+           acceptBtn.Content = "Подключиться";
         }
 
         private void backBtn_Click(object sender, RoutedEventArgs e)

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using VideoLibrary;
 using Vlc.DotNet.Wpf;
@@ -27,17 +28,6 @@ namespace WpfVideo
     internal class ServerChatSession : TcpSession
     {
         public ServerChatSession(TcpServer server) : base(server) { }
-
-        protected override void OnConnected()
-        {
-            Console.WriteLine($"Chat TCP session with Id {Id} connected!");
-
-        }
-
-        protected override void OnDisconnected()
-        {
-            Console.WriteLine($"Chat TCP session with Id {Id} disconnected!");
-        }
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
@@ -53,7 +43,7 @@ namespace WpfVideo
 
         protected override void OnError(SocketError error)
         {
-            Console.WriteLine($"Chat TCP session caught an error with code {error}");
+            Console.WriteLine($"Server error: {error}");
         }
     }
 
@@ -63,7 +53,7 @@ namespace WpfVideo
         protected override TcpSession CreateSession() { return new ServerChatSession(this); }
         protected override void OnError(SocketError error)
         {
-            Console.WriteLine($"error code: {error}");
+            Console.WriteLine($"Server error: {error}");
         }
     }
 
@@ -95,6 +85,10 @@ namespace WpfVideo
                 Thread.Yield();
             }
         }
+        /// <summary>
+        /// Отправить текстовую строку серверу
+        /// </summary>
+        /// <param name="text"></param>
         public void WriteLine(string text)
         {
             SendAsync(text);
@@ -102,7 +96,6 @@ namespace WpfVideo
         }
         protected override void OnDisconnected()
         {
-
             if (!_stop)
             {
                 Connect();
@@ -136,48 +129,42 @@ namespace WpfVideo
         {
             SendAsync(dataAsBytes);
         }
-    }
 
+        internal string GetUser()
+        {
+            return clientUser.ClientUserName;
+        }
+    }
+  
     public class CustomEventArgs : EventArgs
     {
+        /// <summary>
+        /// byte to string
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="size"></param>
         public CustomEventArgs(byte[] buffer, long offset, long size)
         {
             Message = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
 
         }
-        public CustomEventArgs(byte[] buffer)
-        {
-            Message = Encoding.UTF8.GetString(buffer);
+        //public CustomEventArgs(byte[] buffer)
+        //{
+        //    Message = Encoding.UTF8.GetString(buffer);
 
-        }
-        public CustomEventArgs(string message)
-        {
-            Message = message;
+        //}
+        //public CustomEventArgs(string message)
+        //{
+        //    Message = message;
 
-        }
+        //}
         public string Message { get; set; }
     }
-
-    internal class Users
-    {
-        private readonly List<string> userlist = new List<string>(100);
-
-        public void Add(string user)
-        {
-            userlist.Add(user);
-        }
-        public int Count()
-        {
-            return userlist.Count();
-        }
-        public List<string> GetUsers()
-        {
-            return userlist;
-        }
-
-    }
+    
     public class ClientUser
     {
+
         public ClientUser(string message, string Id, string Ip)
         {
             ClientUserName = message;
@@ -188,11 +175,10 @@ namespace WpfVideo
         public string Id { get; set; }
         public string Ip { get; set; }
     }
-
+ 
     public partial class PlayerWindow : Window
     {
         private ClientUser clientUsername = new ClientUser("", "", "");
-
         private readonly VlcControl control;
         public ChatClient _client;
         private readonly Commands command;
@@ -224,7 +210,10 @@ namespace WpfVideo
         }
         private const string StreamParams = ":network-caching=2000";
         private bool isPlayerStarted = false;
-
+        /// <summary>
+        /// запуск плеера
+        /// </summary>
+        /// <param name="flnm"></param>
         private void StartPlayer(string flnm = "null")
         {
             Title = selectedVideoName + " | " + login.hostString.Text + ":" + login.portString.Text + " " + clientUsername.ClientUserName;
@@ -263,10 +252,12 @@ namespace WpfVideo
                 }
 
                 string subFile = flnm.Substring(0, flnm.Length - 3) + "srt";
+               
                 string[] options = new string[]
                     {
                          new string("--sub-File="+subFile)
                     };
+                ///подключение файла субтитров если он существует
                 if (File.Exists(subFile))
                 {
                     control.SourceProvider.MediaPlayer.SetMedia(fn, options);
@@ -289,6 +280,10 @@ namespace WpfVideo
         }
 
         private string tmp = "";
+        /// <summary>
+        /// запуск видео из Vimeo
+        /// </summary>
+        /// <param name="link"></param>
         private async void VimeoStream(string link)
         {
 
@@ -320,6 +315,10 @@ namespace WpfVideo
 
             return downloadItem.Link;
         }
+        /// <summary>
+        /// запуск видео из YT
+        /// </summary>
+        /// <param name="link"></param>
         private async void YTStream(string link)
         {
 
@@ -371,7 +370,11 @@ namespace WpfVideo
             control.SourceProvider.MediaPlayer.Time = position;
             changePos = false;
         }
-
+        /// <summary>
+        /// Возвращает время в формате ч:м:с
+        /// </summary>
+        /// <param name="ms"></param>
+        /// <returns></returns>
         private string GetCorrectTime(long ms)
         {
             TimeSpan t = TimeSpan.FromMilliseconds(ms);
@@ -384,7 +387,11 @@ namespace WpfVideo
 
         private int tickCounter = 0;
         private int saveCounter = 150;
-
+        /// <summary>
+        /// таймер
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timer_Tick(object sender, EventArgs e)
         {
             if (++tickCounter > 15 && logPanel.Visibility != Visibility.Visible)
@@ -393,7 +400,7 @@ namespace WpfVideo
                 tickCounter = 0;
 
             }
-            if (saveCounter > 0)
+            if (saveCounter > 0) // кнопка восстановления предыдущей сессии исчеезает через 15 секунд
             {
                 float tmp = MathF.Round(saveCounter / 10) + 1;
 
@@ -405,19 +412,21 @@ namespace WpfVideo
             {
                 resetBtn.Visibility = Visibility.Collapsed;
             }
-
+            
             if (control.SourceProvider.MediaPlayer.Audio.Tracks.Count > 0)
             {
                 ContextMenu context = new ContextMenu();
                 context.PreviewKeyDown += Context_PreviewKeyDown;//= Context_MouseDown;
-                List<Vlc.DotNet.Core.TrackDescription> s = control.SourceProvider.MediaPlayer.Audio.Tracks.All.ToList();
-
+                List<Vlc.DotNet.Core.TrackDescription> audios = control.SourceProvider.MediaPlayer.Audio.Tracks.All.ToList();
+                var subtitles = control.SourceProvider.MediaPlayer.SubTitles.All.ToList();
+                ///Выбор аудиодорожки видео в контекстном меню
                 MenuItem newMenuItem1 = new MenuItem
                 {
                     Header = "Аудио"
                 };
                 context.Items.Add(newMenuItem1);
-                foreach (Vlc.DotNet.Core.TrackDescription item in s)
+                ///Выбор субтитров видео
+                foreach (Vlc.DotNet.Core.TrackDescription item in audios)
                 {
                     MenuItem newMenuItem2 = new MenuItem();
                     MenuItem newExistMenuItem = (MenuItem)context.Items[0];
@@ -427,6 +436,27 @@ namespace WpfVideo
                     newExistMenuItem.Items.Add(newMenuItem2);
 
                 }
+                MenuItem newMenuItem11 = new MenuItem
+                {
+                    Header = "Субтитры"
+                };
+
+                if (subtitles.Count > 0)
+                    newMenuItem11.IsEnabled = true;
+                else
+                    newMenuItem11.IsEnabled = false;
+                context.Items.Add(newMenuItem11);
+                foreach (var item in subtitles)
+                {
+                    MenuItem newMenuItem2 = new MenuItem();
+                    MenuItem newExistMenuItem = (MenuItem)context.Items[1];
+                    newMenuItem2.Header = item.Name;
+                    newMenuItem2.Tag = item.ID.ToString();
+                    newMenuItem2.Click += NewMenuItem2_Click;
+                    newExistMenuItem.Items.Add(newMenuItem2);
+
+                }
+
                 controlPanel.ContextMenu = context;
                 controlPanel.ContextMenu.MouseDown += Context_MouseDown;
             }
@@ -451,17 +481,28 @@ namespace WpfVideo
                 if (isPlaying)
                 {
                     control.SourceProvider.MediaPlayer.Play();
+                    playBtnImage.Source = new BitmapImage(new Uri(@"/TcpVideoPlayer;component/icons8-pause-52.png", UriKind.Relative));
                 }
                 else
                 {
                     control.SourceProvider.MediaPlayer.Pause();
+                    playBtnImage.Source = new BitmapImage(new Uri(@"/TcpVideoPlayer;component/icons8-play-52(1).png", UriKind.Relative));
                 }
             }
+        }
+        
+        private void NewMenuItem2_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem m = (MenuItem)sender;
+            //изменяет субтитры
+            control.SourceProvider.MediaPlayer.SubTitles.Current = control.SourceProvider.MediaPlayer.SubTitles.All.Where(x => x.ID == int.Parse(m.Tag.ToString())).FirstOrDefault();
+
         }
 
         private void Mi_Click(object sender, RoutedEventArgs e)
         {
             MenuItem m = (MenuItem)sender;
+            //изменяет аудиодорожку
             control.SourceProvider.MediaPlayer.Audio.Tracks.Current = control.SourceProvider.MediaPlayer.Audio.Tracks.All.Where(x => x.ID == int.Parse(m.Tag.ToString())).FirstOrDefault();
         }
 
@@ -474,14 +515,14 @@ namespace WpfVideo
 
         }
 
-        private void ClientTick()
-        {
-        }
+ 
         private void playPause_Click(object sender, RoutedEventArgs e)
         {
             PlayPause();
         }
-
+        /// <summary>
+        /// Остановка и запуск видео
+        /// </summary>
         private void PlayPause()
         {
             if (control.SourceProvider.MediaPlayer.IsPlaying())
@@ -498,7 +539,9 @@ namespace WpfVideo
             }
 
         }
-
+        /// <summary>
+        /// отправление позиции видео на сервер
+        /// </summary>
         private void SendPos()
         {
             Thread.Sleep(50);
@@ -525,9 +568,11 @@ namespace WpfVideo
 
         private readonly string lastCommand = "";
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
+        { 
+            playBtnImage.Source = new BitmapImage(new Uri(@"/TcpVideoPlayer;component/icons8-play-52(1).png", UriKind.Relative));
             string line;
             int counter = 0;
+            ///загрузка данных о последней сессии из файла
             if (File.Exists("LastSession.lsn"))
             {
                 System.IO.StreamReader file =
@@ -550,6 +595,24 @@ namespace WpfVideo
             }
         }
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+       //исколючить пользователя из сервера
+            client.WriteLine("/kick " + userList.SelectedItem.ToString());
+
+            for (int n = usershost.Count - 1; n >= 0; --n)
+            {
+
+                if (usershost[n].ToString() == userList.SelectedItem.ToString() + "  |-{|" && userList.SelectedItem.ToString() != client.GetUser())
+                {
+                    usershost.RemoveAt(n);
+                }
+            }
+            SendUserInfo();
+        }
+        /// <summary>
+        /// отправляет информацию о пользователе на сервер
+        /// </summary>
         private void SendUserInfo()
         {
             List<string> data = usershost;
@@ -562,6 +625,11 @@ namespace WpfVideo
 
         private readonly List<string> usershost = new List<string>();
         private string lastMessage;
+        /// <summary>
+        /// Обработчик комманд сервера
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void _client_RaiseCustomEvent(object sender, CustomEventArgs e)
         {
             lastMessage = e.Message;
@@ -599,6 +667,14 @@ namespace WpfVideo
 
                                 SendUserInfo();
                             }
+                           
+                        }
+                        else
+                        {
+                            if (lastMessage.Contains("/kick "+ client.GetUser()))
+                            {
+                                Environment.Exit(1);
+                            }
                         }
 
                         if (lastMessage.Split(' ')[0] == "/set")
@@ -632,6 +708,7 @@ namespace WpfVideo
                                     break;
                                 case "PLAY":
                                     control.SourceProvider.MediaPlayer.Play();
+                                    playBtnImage.Source = new BitmapImage(new Uri(@"/TcpVideoPlayer;component/icons8-pause-52.png", UriKind.Relative));
                                     isPlaying = true;
                                     isPlayerStarted = true;
 
@@ -645,6 +722,7 @@ namespace WpfVideo
                                     break;
                                 case "PAUSE":
                                     control.SourceProvider.MediaPlayer.Pause();
+                                    playBtnImage.Source = new BitmapImage(new Uri(@"/TcpVideoPlayer;component/icons8-play-52(1).png", UriKind.Relative));
                                     isPlaying = false;
                                     isPlayerStarted = false;
                                     break;
@@ -697,8 +775,7 @@ namespace WpfVideo
         {
             control.SourceProvider.MediaPlayer.Pause();
             isPlaying = false;
-            Opf();
-
+            Opf(); 
         }
 
         private void Opf()
@@ -707,10 +784,12 @@ namespace WpfVideo
             {
                 System.Windows.Forms.DialogResult result = fbd.ShowDialog();
                 GetFiles(fbd.SelectedPath);
-            }
-
+            } 
         }
-
+        /// <summary>
+        /// загрузка всех файлов из выбранной папки 
+        /// </summary>
+        /// <param name="SelectedPath"></param>
         private void GetFiles(string SelectedPath)
         {
             if (!string.IsNullOrWhiteSpace(SelectedPath))
@@ -718,10 +797,9 @@ namespace WpfVideo
                 videosFolder = SelectedPath;
                 string[] files = Directory.GetFiles(SelectedPath);
                 filesListbox.Items.Clear();
-                string str = "";
                 foreach (string a in files)
                 {
-                    str = a.Replace(@"\", "/").Split('/')[a.Replace(@"\", "/").Split('/').Length - 1];
+                    string str= a.Replace(@"\", "/").Split('/')[a.Replace(@"\", "/").Split('/').Length - 1];
                     Video video = new Video(videosFolder, str);
                     if (str.Substring(str.Length - 3) == "mkv" || str.Substring(str.Length - 3) == "mp4")
                     {
@@ -752,6 +830,9 @@ namespace WpfVideo
         }
 
         private string lstpos = "";
+        /// <summary>
+        /// изменение позиции видео
+        /// </summary>
         private void SliderMauseUp(object sender, MouseButtonEventArgs e)
         {
             changePos = false;
@@ -792,6 +873,9 @@ namespace WpfVideo
         }
 
         private bool isHost = false;
+        /// <summary>
+        /// изменение скорости видео
+        /// </summary>
         private void Speed_Click(object sender, RoutedEventArgs e)
         {
             string s = (sender as Button).Content.ToString();
@@ -801,7 +885,9 @@ namespace WpfVideo
             speedPanel.Visibility = Visibility.Collapsed;
 
         }
-
+        /// <summary>
+        /// открыть/ закрыть меюню скорости видео
+        /// </summary>
         private void settings_Click(object sender, RoutedEventArgs e)
         {
 
@@ -819,12 +905,15 @@ namespace WpfVideo
         private ChatServer _server;
         private ChatClient client;
         private bool host = false;
+        /// <summary>
+        /// подключение на сервер
+        /// </summary>
         private void connectBtn_Click(object sender, RoutedEventArgs e)
         {
 
             login = new LoginWindow();
             login.ShowDialog();
-            if (login.acceptBtn.Content.ToString() == "host")
+            if (login.acceptBtn.Content.ToString() == "Создать")
             {
                 isHost = true;
                 IPAddress iPAddress = IPAddress.Parse(login.hostString.Text);
@@ -832,10 +921,13 @@ namespace WpfVideo
                 _server.Start();
                 host = true;
 
-            }
-            else
-            {
-
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = "Выгнать";
+                menuItem.Click += MenuItem_Click;
+                contextMenu.Items.Add(menuItem);
+                userList.ContextMenu = contextMenu;
+ 
             }
 
             client = new ChatClient(login.hostString.Text, int.Parse(login.portString.Text));
@@ -863,7 +955,9 @@ namespace WpfVideo
         {
 
         }
-
+        /// <summary>
+        /// открыть / закрыть мею
+        /// </summary>
         private void logShowHide_Click(object sender, RoutedEventArgs e)
         {
             if (logPanel.Visibility == Visibility.Visible)
@@ -875,7 +969,9 @@ namespace WpfVideo
                 logPanel.Visibility = Visibility.Visible;
             }
         }
-
+        /// <summary>
+        /// назначение клавиш
+        /// </summary>
         private void controlPanel_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F)
@@ -908,6 +1004,7 @@ namespace WpfVideo
 
         private void controlPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            ///перемещение окна плеера
             if (e.ChangedButton == MouseButton.Left)
             {
                 Cursor = Cursors.Arrow;
@@ -922,7 +1019,9 @@ namespace WpfVideo
             }
 
         }
-
+        /// <summary>
+        /// переключение видео
+        /// </summary>
         private void NextVideo()
         {
             if (filesListbox.SelectedIndex + 1 <= filesListbox.Items.Count)
@@ -1029,11 +1128,13 @@ namespace WpfVideo
 
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private async void Window_Closed(object sender, EventArgs e)
         {
-            SaveAsync();
-            client.Send("IMO|" + clientUsername.ClientUserName);
+           
+            client.Send("IMO|" + client.GetUser());
+            await SaveAsync();
             client.Disconnect();
+            Environment.Exit(1);
             System.Diagnostics.Process.GetCurrentProcess().Kill();
 
         }
@@ -1086,7 +1187,7 @@ namespace WpfVideo
             selectedVideoPath = ((filesListbox).SelectedItem as Video).FullPath;
             videoPath = selectedVideoPath + "/" + selectedVideoName;
 
-            client.Send("/set " /*+ clientUsername.ClientUserName + " "*/ + selectedVideoName);
+            client.Send("/set "   + selectedVideoName);
 
         }
 

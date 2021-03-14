@@ -21,6 +21,8 @@
   <ItemGroup>
     <None Remove="emojisqwad_119212226_451016725803217_3527878487396807783_n.jpg" />
     <None Remove="emojisqwad_127090559_994288217721417_1396185176314147888_n.jpg" />
+    <None Remove="icons8-pause-52.png" />
+    <None Remove="icons8-play-52%281%29.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +45,8 @@
   <ItemGroup>
     <Resource Include="emojisqwad_119212226_451016725803217_3527878487396807783_n.jpg" />
     <Resource Include="emojisqwad_127090559_994288217721417_1396185176314147888_n.jpg" />
+    <Resource Include="icons8-pause-52.png" />
+    <Resource Include="icons8-play-52(1).png" />
   </ItemGroup>
 
 </Project>
